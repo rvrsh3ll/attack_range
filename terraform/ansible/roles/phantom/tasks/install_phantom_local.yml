@@ -1,0 +1,97 @@
+---
+
+- name: Change mirror to vault.centos.org
+  shell: sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo
+  become: yes
+
+- name: Uncomment baseurl lines
+  shell: sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo
+  become: yes
+
+- name: Comment out mirrorlist lines
+  shell: sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
+  become: yes
+
+- name: Update all packages
+  become: yes
+  yum:
+    name: "*"
+    state: latest
+    update_cache: yes
+
+# - name: Enable PowerTools repository
+#   become: yes
+#   command: dnf config-manager --set-enabled powertools
+#   ignore_errors: yes  # Some systems might call it 'CodeReady'
+
+# - name: Enable CodeReady Builder repository (alternative to PowerTools)
+#   become: yes
+#   command: dnf config-manager --set-enabled codeready-builder-for-rhel-8-x86_64-rpms
+#   ignore_errors: yes
+
+# - name: Install EPEL repository
+#   become: yes
+#   yum:
+#     name: epel-release
+#     state: present
+#     disable_gpg_check: yes
+
+# - name: Clean yum cache
+#   become: yes
+#   command: yum clean all
+
+# - name: Make yum cache
+#   become: yes
+#   command: yum makecache
+
+# - name: Install required dependencies
+#   become: yes
+#   yum:
+#     name:
+#       - fontconfig
+#       - libicu
+#       - libxslt
+#       - mailcap
+#       - xmlsec1
+#       - xmlsec1-openssl
+#       - zip
+#       - jq
+#     state: present
+#     update_cache: yes
+
+- name: Copy Splunk SOAR to server
+  become: yes
+  become_user: vagrant
+  unarchive:
+    src: "../../apps/{{ phantom_server.phantom_app }}"
+    dest: /home/vagrant
+
+- name: Creates directory
+  become: yes
+  become_user: root
+  file:
+    path: /opt/soar
+    state: directory
+    owner: vagrant
+    group: vagrant
+
+- name: prepare phantom install script without apps
+  become: yes
+  command: /home/vagrant/splunk-soar/soar-prepare-system --splunk-soar-home /opt/soar --no-prompt 
+
+- name: copy splunk soar folder
+  become: yes
+  become_user: root
+  command: cp -r /home/vagrant/splunk-soar /home/phantom/splunk-soar
+
+- name: chown splunk soar folder
+  become: yes
+  become_user: root
+  command: chown -R phantom:phantom /home/phantom/splunk-soar
+
+- name: run the phantom install script 
+  become: yes
+  become_user: phantom
+  command: ./soar-install --splunk-soar-home /opt/soar --no-prompt --ignore-warnings
+  args:
+    chdir: /home/phantom/splunk-soar

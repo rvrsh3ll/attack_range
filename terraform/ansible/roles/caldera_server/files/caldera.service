@@ -1,0 +1,15 @@
+[Unit]
+Description=Caldera Service
+After=network.target
+
+[Service]
+Type=simple
+User=admin
+Group=admin
+KillSignal=SIGINT #workaround (works with this parameter)
+EnvironmentFile=/home/admin/caldera/caldera.env
+WorkingDirectory=/home/admin/caldera
+ExecStart=pipenv run python server.py --insecure --build
+
+[Install]
+WantedBy=multi-user.target

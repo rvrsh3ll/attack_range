@@ -1,0 +1,8 @@
+---
+- name: Install on Windows [Caldera Agent]
+  ansible.builtin.import_tasks: windows.yml
+  when: caldera_agent_server_type == "windows"
+
+- name: Install on Linux [Caldera Agent]
+  ansible.builtin.import_tasks: linux.yml
+  when: caldera_agent_server_type == "linux"

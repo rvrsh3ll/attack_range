@@ -6,7 +6,7 @@ data "aws_ami" "latest-kali-linux" {
 
   filter {
       name   = "name"
-      values = ["kali-last-snapshot-amd64-2023*"]
+      values = ["kali-last-snapshot-amd64-*"]
   }
 
   filter {
@@ -35,7 +35,7 @@ resource "aws_instance" "kali_machine" {
     connection {
       type        = "ssh"
       user        = "kali"
-      host        = aws_instance.kali_machine[count.index].public_ip
+      host        = self.public_ip
       private_key = file(var.aws.private_key_path)
     }
   }

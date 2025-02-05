@@ -47,6 +47,8 @@ Configure Attack Range:
 python attack_range.py configure
 ````
 
+Once the configuration is complete, you can proceed to build and control your range [here](Control_Attack_Range.md)
+
 ## Linux
 Install the required packages:
 ````bash
@@ -54,24 +56,17 @@ apt-get update
 apt-get install -y python3.8 git unzip python3-pip curl
 ````
 
-Clone attack_range git repo to local machine:
-````bash
-git clone https://github.com/splunk/attack_range.git
-cd attack_range
-````
-
 Install and configure Terraform:
 ````bash
-curl -s https://releases.hashicorp.com/terraform/1.1.8/terraform_1.1.8_linux_amd64.zip -o terraform.zip && \
+curl -s https://releases.hashicorp.com/terraform/1.9.8/terraform_1.9.8_linux_amd64.zip -o terraform.zip && \
 unzip terraform.zip && \
 mv terraform /usr/local/bin/
 ````
 
-Install Packer:
+Clone attack_range git repo to local machine:
 ````bash
-curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-sudo apt-get update && sudo apt-get install packer
+git clone https://github.com/splunk/attack_range.git
+cd attack_range
 ````
 
 Install the AWS CLI:
@@ -91,5 +86,8 @@ poetry install
 python attack_range.py configure
 ````
 
+Once the configuration is complete, you can proceed to build and control your range [here](Control_Attack_Range.md)
+
 ## Windows
-We recommend to use the Windows Subsystem for Linux (WSL). You can find a tutorial [here](https://docs.microsoft.com/en-us/windows/wsl/install). After installed WSL, you can follow the steps described in the Linux section.
+
+We recommend using the Windows Subsystem for Linux (WSL). You can find a tutorial [here](https://docs.microsoft.com/en-us/windows/wsl/install). After installing WSL, you can follow the steps described in the [Linux section](#linux).

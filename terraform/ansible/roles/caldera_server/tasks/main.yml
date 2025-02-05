@@ -1,0 +1,24 @@
+---
+- name: Set Hostname [Caldera]
+  ansible.builtin.import_tasks: hostname.yml
+
+- name: Install dependencies [Caldera]
+  ansible.builtin.import_tasks: dependencies.yml
+
+- name: Install GO [Caldera]
+  ansible.builtin.import_tasks: go.yml
+
+- name: Install Node [Caldera]
+  ansible.builtin.import_tasks: node.yml
+
+- name: Install UPX [Caldera]
+  ansible.builtin.import_tasks: upx.yml
+
+- name: Update Path [Caldera]
+  ansible.builtin.import_tasks: path.yml
+
+- name: Install [Caldera]
+  ansible.builtin.import_tasks: caldera.yml
+
+- name: Update EIP [Caldera]
+  ansible.builtin.import_tasks: update_ip.yml

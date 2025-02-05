@@ -1,0 +1,12 @@
+---
+
+- include_tasks: nginx_web_proxy.yml
+- include_tasks: configure_inputs.yml
+
+- name: Restart splunk uf
+  become: true
+  command: "systemctl restart SplunkForwarder"
+
+- name: restart nginx again
+  become: true
+  command: "nginx -s reload"

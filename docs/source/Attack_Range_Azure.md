@@ -41,6 +41,8 @@ Configure Attack Range:
 python attack_range.py configure
 ````
 
+Once the configuration is complete, you can proceed to build and control your range [here](Control_Attack_Range.md)
+
 ## Linux
 Install the required packages:
 ````bash
@@ -50,16 +52,9 @@ apt-get install -y python3.8 git unzip python3-pip curl
 
 Install and configure Terraform:
 ````bash
-curl -s https://releases.hashicorp.com/terraform/1.1.8/terraform_1.1.8_linux_amd64.zip -o terraform.zip && \
+curl -s https://releases.hashicorp.com/terraform/1.9.8/terraform_1.9.8_linux_amd64.zip -o terraform.zip && \
 unzip terraform.zip && \
 mv terraform /usr/local/bin/
-````
-
-Install Packer:
-````bash
-curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-sudo apt-get update && sudo apt-get install packer
 ````
 
 Install the Azure CLI:
@@ -80,5 +75,8 @@ Configure Attack Range:
 python attack_range.py configure
 ````
 
+Once the configuration is complete, you can proceed to build and control your range [here](Control_Attack_Range.md)
+
 ## Windows
-We recommend to use the Windows Subsystem for Linux (WSL). You can find a tutorial [here](https://docs.microsoft.com/en-us/windows/wsl/install). After installed WSL, you can follow the steps described in the Linux section.
+
+We recommend using the Windows Subsystem for Linux (WSL). You can find a tutorial [here](https://docs.microsoft.com/en-us/windows/wsl/install). After installing WSL, you can follow the steps described in the [Linux section](#linux).

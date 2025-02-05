@@ -1,0 +1,25 @@
+---
+
+- name: Install Atomic Red Team
+  become: true
+  shell: |
+    pwsh -Command 'IEX (IWR https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicsfolder.ps1 -UseBasicParsing); 
+    Install-AtomicsFolder -Force; 
+    IEX (IWR https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1); 
+    Install-AtomicRedTeam -Force'
+  register: output_art
+
+- name: create directory for default powershell profile
+  file: 
+   path: /root/.config/powershell
+   recurse: yes
+   state: directory
+
+- name: copy default powershell profile
+  copy:
+    src: Microsoft.PowerShell_profile.ps1
+    dest: /root/.config/powershell/Microsoft.PowerShell_profile.ps1
+    force: yes
+
+- debug:
+    var: output_art.stdout_lines

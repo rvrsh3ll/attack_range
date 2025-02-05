@@ -26,6 +26,8 @@ Configure Attack Range:
 python attack_range.py configure
 ````
 
+Once the configuration is complete, you can proceed to build and control your range [here](Control_Attack_Range.md)
+
 ## Linux
 Clone the [Attack Range]() git repo to your local machine, and open the folder:
 ````bash
@@ -52,3 +54,4 @@ Configure Attack Range:
 ````bash
 python attack_range.py configure
 ````
+Once the configuration is complete, you can proceed to build and control your range [here](Control_Attack_Range.md)

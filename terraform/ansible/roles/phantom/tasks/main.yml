@@ -1,8 +1,17 @@
 ---
 # This playbook contains common tasks in this role
 
-- include: configure_phantom.yml
-  when: phantom_app | regex_search("splunk_soar-unpriv-6")
+- include_tasks: install_phantom_aws.yml
+  when: general.cloud_provider == "aws"
 
-- include: configure_phantom_old.yml
-  when: phantom_app | regex_search("splunk_soar-unpriv-5")
+- include_tasks: install_phantom_azure.yml
+  when: general.cloud_provider == "azure"
+
+- include_tasks: install_phantom_local.yml
+  when: general.cloud_provider == "local"
+
+- include_tasks: configure_phantom.yml
+  when: phantom_server.phantom_app | regex_search("splunk_soar-unpriv-6")
+
+- include_tasks: configure_phantom_old.yml
+  when: phantom_server.phantom_app | regex_search("splunk_soar-unpriv-5")

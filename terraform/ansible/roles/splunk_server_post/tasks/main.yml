@@ -1,18 +1,22 @@
 ---
 
-- include: change_splunk_password.yml
+- name: Change the hostname
+  hostname:
+    name: "{{ hostname }}"
 
-- include: phantom_server_configure.yml
-  when: phantom_server == "1" and not cloud_provider == "local"
+- include_tasks: change_splunk_password.yml
 
-- include: phantom_server_configure_local.yml
-  when: phantom_server == "1" and cloud_provider == "local"
+- include_tasks: phantom_server_configure.yml
+  when: phantom_server.phantom_server == "1" and not general.cloud_provider == "local"
 
-- include: install_enterprise_security.yml
-  when: install_es == "1"
+- include_tasks: phantom_server_configure_local.yml
+  when: phantom_server.phantom_server == "1" and general.cloud_provider == "local"
 
-- include: install_botsv3_dataset.yml
-  when: ingest_bots3_data == "1"
+- include_tasks: install_enterprise_security.yml
+  when: splunk_server.install_es == "1"
 
-- include: install_dltk.yml
-  when: install_dltk == "1"
+- include_tasks: install_botsv3_dataset.yml
+  when: splunk_server.ingest_bots3_data == "1"
+
+- include_tasks: install_dltk.yml
+  when: splunk_server.install_dltk == "1"

@@ -50,6 +50,7 @@ variable "windows_servers" {
         create_domain = "0"
         join_domain = "0"
         install_red_team_tools = "0"
+        install_caldera_agent = "0"
     }
   ]
 }
@@ -62,6 +63,7 @@ variable "linux_servers" {
         hostname = "ar-linux"
         image = "ubuntu-18-04-v2-0-0"
         sysmon_config = "configs/SwiftOnSecurity.xml"
+        install_caldera_agent = "0"
     }
   ]
 }
@@ -88,3 +90,13 @@ variable "nginx_server" {
 }
 
 variable "zeek_server" { }
+
+variable "snort_server" { }
+
+variable "caldera_server" {
+    type = map(string)
+
+    default = {
+        "caldera_server" = "0"
+    }
+}

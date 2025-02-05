@@ -30,6 +30,21 @@ class VagrantController(AttackRangeController):
         vagrantfile += self.read_vagrant_file('splunk_server/Vagrantfile')
         vagrantfile += '\n\n'
 
+        for i in range(len(self.config["windows_servers"])):
+            image_name = self.config["windows_servers"][i]["windows_image"]
+            if image_name.startswith("windows-server-2016"):
+                self.config["windows_servers"][i][
+                    "windows_image"
+                ] = "d1vious/windows2016"
+
+            elif image_name.startswith("windows-server-2019"):
+                self.config["windows_servers"][i][
+                    "windows_image"
+                ] = "StefanScherer/windows_2019"
+            else:
+                self.logger.error("Image " + image_name + " not supported for Attack Range local provider.")
+                sys.exit(1)
+
         for idx, x in enumerate(self.config['windows_servers']):
             vagrantfile += self.read_vagrant_file_array('windows_server/Vagrantfile', x, idx)
             vagrantfile += '\n\n'
@@ -81,12 +96,12 @@ class VagrantController(AttackRangeController):
         v1.destroy()
         self.logger.info("attack_range has been destroy using vagrant successfully")
 
-    def stop(self) -> None:
+    def stop(self, instance_ids) -> None:
         self.logger.info("[action] > stop\n")
         v1 = vagrant.Vagrant('vagrant/', quiet_stdout=False)
         v1.halt()
 
-    def resume(self) -> None:
+    def resume(self, instance_ids) -> None:
         self.logger.info("[action] > resume\n")
         v1 = vagrant.Vagrant('vagrant/', quiet_stdout=False)
         v1.up()
@@ -118,9 +133,9 @@ class VagrantController(AttackRangeController):
                     messages.append("\nAccess Splunk via:\n\tWeb > http://192.168.56.12:8000\n\tSSH > cd vagrant & vagrant ssh " + status.name + " \n\tusername: admin \n\tpassword: " + self.config['general']['attack_range_password'])
                 messages.append("\nAccess Guacamole via:\n\tWeb > http://192.168.56.12:8080/guacamole" + "\n\tusername: Admin \n\tpassword: " + self.config['general']['attack_range_password'])
             elif status.name.startswith("ar-phantom"):
-                messages.append("\nAccess Phantom via:\n\tWeb > https://192.168.56.13:8443 \n\tSSH > cd vagrant & vagrant ssh " + status.name + " \n\tusername: admin \n\tpassword: " + self.config['general']['attack_range_password'])
+                messages.append("\nAccess Phantom via:\n\tWeb > https://192.168.56.13:8443 \n\tSSH > cd vagrant & vagrant ssh " + status.name + " \n\tusername: soar_local_admin \n\tpassword: " + self.config['general']['attack_range_password'])
             elif status.name.startswith("ar-win"):
-                messages.append("\nAccess Windows via:\n\tRDP > rdp://localhost:" + str(5389 + int(status.name[-1])) + " \n\tusername: Administrator \n\tpassword: " + self.config['general']['attack_range_password'])
+                messages.append("\nAccess Windows via:\n\tRDP > rdp://192.168.56." + str(14 + int(status.name[-1])) + ":" + str(5389 + int(status.name[-1])) + " \n\tusername: Administrator \n\tpassword: " + self.config['general']['attack_range_password'])
             elif status.name.startswith("ar-linux"):
                 messages.append("\nAccess Linux via:\n\tSSH > cd vagrant & vagrant ssh " + status.name)
             elif status.name.startswith("ar-kali"):

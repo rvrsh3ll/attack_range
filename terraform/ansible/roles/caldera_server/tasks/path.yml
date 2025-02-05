@@ -1,0 +1,12 @@
+---
+- name: Update Path [Caldera]
+  ansible.builtin.blockinfile:
+    path: "/home/admin/.bashrc"
+    insertafter: EOF
+    append_newline: true
+    prepend_newline: true
+    block: |
+      export PATH="/usr/local/go/bin:/usr/local/upx-{{ caldera_server.upx_version }}-amd64_linux:$PATH"
+
+- name: Export PATH [Caldera]
+  ansible.builtin.shell: . ~/.bashrc

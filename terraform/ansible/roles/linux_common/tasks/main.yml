@@ -1,0 +1,7 @@
+---
+#- include_tasks: set-hostname.yml
+#- include_tasks: update_packages.yml
+- include_tasks: disable-dnssec.yml
+- include_tasks: disable-autoupgrade.yml
+- include_tasks: update_sshd_config.yml
+- include_tasks: update_rsyslog_logrotate.yml

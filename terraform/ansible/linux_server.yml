@@ -1,0 +1,21 @@
+- hosts: all
+  gather_facts: False
+  become: true
+  roles:
+    - set_hostname_linux
+    - linux_common
+    - linux_universal_forwarder
+    - linux_osquery
+    - linux_sysmon
+    - linux_install_auditd
+    - linux_install_art
+    - linux_server_post
+    - update_sysmon_config_linux
+    - splunk_byo_linux
+    - contentctl
+    - crowdstrike_falcon_agent_linux
+    - cisco_secure_endpoint_linux
+    - role: caldera_agent
+      vars:
+        caldera_agent_server_type: "linux"
+      when: caldera_server.caldera_server == "1" and linux_servers.install_caldera_agent == "1"
